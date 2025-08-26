@@ -73,6 +73,7 @@
     rafId: 0,
     audio: null,
     mistakes: Object.create(null),
+    kanaMap: null,
   };
 
   // Built-in defaults to survive missing config.json (e.g., file://)
@@ -244,6 +245,44 @@
     return out;
   }
   function buildInputTarget(word, cfg) { return cfg.romajiInput ? kanaToRomaji(word) : word; }
+
+  function containsKana(s) { return /[ぁ-ゟ゠-ヿ]/.test(s); }
+
+  // Build romaji and an index map from each romaji character to the source kana chunk
+  function kanaToRomajiWithMap(s) {
+    if (!s) return { romaji: '', map: [] };
+    if (!containsKana(s)) return { romaji: s, map: Array.from(s).map(() => '') };
+    let out = '';
+    const map = [];
+    for (let i = 0; i < s.length; i++) {
+      const a = s[i];
+      const b = s[i+1] || '';
+      const pair = a + b;
+      if (DIGRAPHS[pair]) {
+        const r = DIGRAPHS[pair];
+        out += r;
+        for (let j = 0; j < r.length; j++) map.push(pair);
+        i++;
+        continue;
+      }
+      if (a === 'っ' || a === 'ッ') {
+        const next = s[i+1] || '';
+        const r = DIGRAPHS[next + (s[i+2]||'')] || KANA_MAP[next] || '';
+        const dup = r ? r[0] : '';
+        if (dup) { out += dup; map.push(a); }
+        continue;
+      }
+      if (a === 'ー') {
+        const last = out[out.length-1] || '';
+        if ('aiueo'.includes(last)) { out += last; map.push('ー'); }
+        continue;
+      }
+      const r = KANA_MAP[a] || a;
+      out += r;
+      for (let j = 0; j < r.length; j++) map.push(a);
+    }
+    return { romaji: out, map };
+  }
 
   function pickNextWord(cfg) {
     if (!state.wordsPool.length) return '';
@@ -458,7 +497,9 @@
     } else {
       // wrong
       state.combo = 0;
-      state.mistakes[ch] = (state.mistakes[ch] || 0) + 1;
+      const idx = state.typed.length;
+      const key = (state.kanaMap && state.kanaMap[idx]) || ch;
+      state.mistakes[key] = (state.mistakes[key] || 0) + 1;
       updateStatsUI();
       playError();
       flashError();
@@ -480,7 +521,14 @@
 
   function nextWord(cfg) {
     state.displayWord = pickNextWord(cfg) || '';
-    state.currentWord = buildInputTarget(state.displayWord, cfg) || '';
+    if (cfg.romajiInput && containsKana(state.displayWord)) {
+      const r = kanaToRomajiWithMap(state.displayWord);
+      state.currentWord = r.romaji || '';
+      state.kanaMap = r.map || null;
+    } else {
+      state.currentWord = buildInputTarget(state.displayWord, cfg) || '';
+      state.kanaMap = null;
+    }
     state.typed = '';
     renderWord(state.currentWord, 0, 0);
     ui.typingInput.value = '';
