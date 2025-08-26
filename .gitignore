@@ -1,0 +1,24 @@
+# OS/Editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Node/JS (future-proof)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Builds/Dist
+dist/
+build/
+
+# Misc
+.env
+.env.*
+.parcel-cache/
+.cache/
+coverage/
+

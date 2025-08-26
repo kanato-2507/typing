@@ -1,0 +1,18 @@
+{
+  "gameDurationSeconds": 15,
+  "wordLists": [
+    { "name": "Default (EN short)", "path": "assets/words/default.txt" },
+    { "name": "日本語（ひらがな）", "path": "assets/words/ja_hiragana.txt" },
+    { "name": "日本語（カタカナ）", "path": "assets/words/ja_katakana.txt" }
+  ],
+  "randomize": true,
+  "romajiInput": true,
+  "noRepeatInSession": false,
+  "caseSensitive": false,
+  "minWordLength": 1,
+  "maxWordLength": 32,
+  "comboBonus": false,
+  "errorFlashMs": 150,
+  "successAnimMs": 200,
+  "sound": { "enabled": true, "volume": 0.6 }
+}

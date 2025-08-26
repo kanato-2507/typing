@@ -1,0 +1,93 @@
+:root {
+  --bg: #0f1115;
+  --panel: #151922;
+  --text: #e6eaf2;
+  --muted: #90a4ae;
+  --ok: #2e7d32;
+  --err: #d32f2f;
+  --accent: #4f8ef7;
+  --timer: #4f8ef7;
+  --timer-warn: #fbc02d;
+  --timer-crit: #ef5350;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans JP", sans-serif;
+}
+
+.container { max-width: 840px; margin: 0 auto; padding: 24px; }
+.app-header { text-align: center; margin-bottom: 8px; }
+.app-header h1 { font-size: 24px; margin: 0; }
+
+.screen.hidden { display: none; }
+.panel { background: var(--panel); border-radius: 12px; padding: 20px; }
+.actions { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+.primary { background: var(--accent); color: white; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; }
+.primary:hover { filter: brightness(1.05); }
+.ghost { background: transparent; color: var(--text); border: 1px solid #2a3140; padding: 8px 12px; border-radius: 8px; cursor: pointer; }
+.ghost:hover { background: #1a2030; }
+
+.settings { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 12px; }
+label { display: grid; gap: 6px; font-size: 14px; color: var(--muted); }
+input[type="number"], select, input[type="text"], input[type="range"] {
+  background: #0f1320; color: var(--text); border: 1px solid #2a3140; border-radius: 8px; padding: 8px 10px;
+}
+input[type="checkbox"] { transform: translateY(2px); }
+.audio-controls { display: flex; gap: 16px; align-items: center; }
+
+.hud { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin: 12px 0; }
+.stats { display: grid; grid-template-columns: repeat(5, auto); gap: 12px; font-variant-numeric: tabular-nums; }
+
+.timer { position: relative; height: 14px; background: #0f1320; border-radius: 999px; overflow: hidden; flex: 1; }
+.timer-bar { position: absolute; inset: 0; width: 100%; background: var(--timer); transform-origin: left center; }
+.timer-label { position: absolute; right: 8px; top: -24px; color: var(--muted); font-size: 12px; }
+
+.word-area { min-height: 80px; display: flex; align-items: center; justify-content: center; font-size: 36px; letter-spacing: 1px; padding: 24px 8px; border-radius: 12px; background: #0f1320; border: 1px solid #2a3140; }
+.word-area .word-stack { display: flex; flex-direction: column; align-items: center; }
+.word-area .jp-word { font-size: 36px; }
+.word-area .romaji-line { font-size: 20px; margin-top: 8px; opacity: 0.9; }
+.word-area .romaji-line .char.correct { color: var(--text); }
+.word-area .romaji-line .char.pending { color: var(--muted); }
+.res-mistakes { margin-top: 12px; font-size: 14px; color: var(--muted); }
+.leaderboard { margin-top: 16px; }
+.leaderboard h3 { margin: 8px 0; font-size: 16px; color: var(--muted); }
+.toplist { margin: 0; padding-left: 18px; }
+.toplist li { margin: 2px 0; font-size: 14px; }
+.char { position: relative; padding: 0 1px; }
+.char.correct { color: var(--ok); }
+.char.pending { color: var(--text); }
+.char.error, .char.expected { color: var(--err); }
+
+.shake { animation: shake 120ms ease-in-out; }
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
+}
+.flash { animation: flash 150ms ease-in-out; }
+@keyframes flash {
+  0% { background-color: rgba(211, 47, 47, 0.25); }
+  100% { background-color: transparent; }
+}
+
+.success-pop { animation: pop 180ms ease-out; }
+@keyframes pop {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-10px) scale(0.98); opacity: 0; }
+}
+
+.input-row { display: flex; gap: 8px; align-items: center; margin-top: 12px; }
+.typing-input { flex: 1; font-size: 20px; padding: 10px 12px; border-radius: 10px; border: 1px solid #2a3140; background: #0f1320; color: var(--text); }
+
+.hint { color: var(--muted); margin-top: 0; }
+
+.sr-only { position: absolute; left: -9999px; height: 1px; width: 1px; overflow: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}

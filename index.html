@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Typing Game</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" sizes="any" />
+    <link rel="shortcut icon" href="assets/favicon.svg" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header class="app-header">
+        <h1>ブラウザ タイピングゲーム</h1>
+      </header>
+
+      <!-- Start Screen -->
+      <section id="start-screen" class="screen">
+        <div class="panel">
+          <h2>スタート</h2>
+          <p class="hint">設定を選んで Enter または「開始」でスタート。</p>
+          <div class="settings">
+            <label>
+              制限時間（秒）
+              <input id="duration-input" type="number" min="5" max="600" step="5" value="15" />
+            </label>
+            <label>
+              単語リスト
+              <select id="wordlist-select"></select>
+            </label>
+            <label>
+              大文字小文字を区別
+              <input id="case-sensitive" type="checkbox" />
+            </label>
+            <label>
+              ローマ字入力（かな→romaji）
+              <input id="romaji-input" type="checkbox" checked />
+            </label>
+            <label>
+              ランダム出題
+              <input id="randomize" type="checkbox" checked />
+            </label>
+            <label>
+              セッション内重複なし
+              <input id="no-repeat" type="checkbox" />
+            </label>
+            <div class="audio-controls">
+              <label>
+                ミュート
+                <input id="mute-toggle" type="checkbox" />
+              </label>
+              <label>
+                音量
+                <input id="volume" type="range" min="0" max="1" step="0.05" />
+              </label>
+            </div>
+          </div>
+          <div class="actions">
+            <button id="start-button" class="primary">開始</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Play Screen -->
+      <section id="play-screen" class="screen hidden" aria-live="off">
+        <div class="hud">
+          <div class="timer">
+            <div id="timer-bar" class="timer-bar"></div>
+            <div id="timer-label" class="timer-label">15.0</div>
+          </div>
+          <div class="stats">
+            <div>正打鍵: <span id="stat-correct">0</span></div>
+            <div>総打鍵: <span id="stat-total">0</span></div>
+            <div>精度: <span id="stat-acc">100%</span></div>
+            <div>成功単語: <span id="stat-words">0</span></div>
+            <div>コンボ: <span id="stat-combo">0</span></div>
+          </div>
+        </div>
+
+        <div id="word-area" class="word-area" aria-live="polite" aria-atomic="true"></div>
+
+        <div class="input-row">
+          <input id="typing-input" class="typing-input" type="text" inputmode="latin" autocomplete="off" autocapitalize="off" spellcheck="false" />
+          <button id="pause-button" class="ghost" title="一時停止 (Esc)">⏸</button>
+        </div>
+
+        <div class="play-actions">
+          <button id="mute-button" class="ghost" title="ミュート切替 (M)">🔊</button>
+          <button id="quit-button" class="ghost">設定へ戻る</button>
+        </div>
+      </section>
+
+      <!-- Result Screen -->
+      <section id="result-screen" class="screen hidden">
+        <div class="panel">
+          <h2>結果</h2>
+          <div class="results">
+            <div>スコア（正打鍵）: <span id="res-score">0</span></div>
+            <div>CPM: <span id="res-cpm">0</span></div>
+            <div>WPM: <span id="res-wpm">0</span></div>
+            <div>精度: <span id="res-acc">0%</span></div>
+            <div>成功単語: <span id="res-words">0</span></div>
+            <div>ハイスコア: <span id="res-high">0</span></div>
+            <div id="res-mistakes" class="res-mistakes"></div>
+          </div>
+          <div class="leaderboard">
+            <h3>ベスト3</h3>
+            <ol id="res-toplist" class="toplist"></ol>
+          </div>
+          <div class="actions">
+            <button id="retry-button" class="primary">もう一度</button>
+            <button id="back-button" class="ghost">設定へ戻る</button>
+          </div>
+        </div>
+      </section>
+
+      <div id="sr-live" class="sr-only" role="status" aria-live="polite"></div>
+    </main>
+
+    <script src="main.js"></script>
+  </body>
+  </html>
